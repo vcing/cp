@@ -69,7 +69,7 @@ test("generate node for calendar puzzle", () => {
   expect(result).toStrictEqual([
     {
       id: 0,
-      nodes: [{ id: 0, start: 30, duration: 120, index: 1 }],
+      nodes: [{ id: 0, start: 30, duration: 120, index: 0 }],
       siblings: 1,
     },
     {

@@ -83,7 +83,7 @@ export const generateNodeGroup = (eventGroup: EventGroup) => {
           id: currentEvent.id,
           start: currentEvent.start,
           duration: currentEvent.end - currentEvent.start,
-          index: 1,
+          index: 0,
         },
       ],
       siblings: 1,
