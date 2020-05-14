@@ -1,13 +1,12 @@
 .calendar {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
+
 }
 
 .title {
   color: aliceblue;
   margin: 0;
   flex: 100%;
+  margin-bottom: 10px;
 }
 
 .wrap {
@@ -69,11 +68,13 @@
   border: 1px solid #ccc;
   position: relative;
   border-radius: 3px;
+  overflow: hidden;
 }
 
 .node {
   position: absolute;
-  width: 600px;
+  width: 0;
+  height: 0;
   background: white;
   box-sizing: border-box;
   padding: 5px 10px;
@@ -82,6 +83,7 @@
   overflow: hidden;
   border-radius: 3px;
   margin-left: 10px;
+  transition: width .3s, height .3s, top .3s;
 }
 
 .node h3 {

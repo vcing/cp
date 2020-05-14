@@ -34,7 +34,7 @@
   padding: 0;
   list-style: none;
   text-align: left;
-  height: 200px;
+  height: 266.7px;
   overflow: auto;
 }
 
@@ -54,7 +54,7 @@
   padding: 0;
   margin: 0;
   color: #ccc;
-  background: #333;
+  background: #999;
   border: 0;
   border-radius: 50%;
   text-align: center;
@@ -103,4 +103,70 @@
 
 .add:hover {
   border-color: #666;
+}
+
+.dialog {
+  margin: 10px;
+  padding: 10px;
+  text-align: left;
+  height: 200px;
+  overflow: auto;
+  background: #ccc;
+  border-radius: 2px;
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.message {
+  margin: 0;
+}
+
+.setting {
+  display: flex;
+  flex-wrap: wrap;
+  width: 550px;
+  justify-content: center;
+}
+
+.setting label {
+  flex: 0 0 24%;
+  overflow: hidden;
+}
+
+.setting input {
+  margin: 0 5px;
+  width: 80%;
+  border: 0;
+  border-bottom: 1px solid #ccc;
+  transition: border-color 0.3s;
+  text-align: center;
+}
+
+.setting input:focus {
+  border-bottom: 1px solid #666;
+  outline: none;
+}
+
+.setting button {
+  border: 1px solid #d9d9d9;
+  color: #666;
+  border-radius: 3px;
+  padding: 5px 15px;
+  line-height: 1;
+  transition: border-color 0.3s;
+  cursor: pointer;
+  background-color: white;
+  margin: 20px 10px;
+}
+
+.setting button:hover {
+  border-color: #666;
+}
+
+.setting button.disabled {
+  background: #666;
+  color: #ddd;
+  border: none;
+  opacity: 0.5;
+  cursor: not-allowed;
 }

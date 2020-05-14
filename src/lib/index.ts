@@ -1,9 +1,28 @@
+/**
+ *
+ * 事件结构
+ * 由于无论是react列表，还是新增删除操作
+ * 都需要对每一个事件有一个唯一标识
+ * 所以在读取数据时默认会将该事件在数组中的序号作为ID
+ * @export
+ * @interface Event
+ */
 export interface Event {
   id: number;
   start: number;
   end: number;
 }
 
+/**
+ * 事件组
+ * 表示一系列相互影响的数据
+ * 由于任意两个数据如果在事件时间上有重合，则他们就应该一样宽
+ * 所以以一组互相存在区间交集的事件为单位进行布局运算
+ * 保存开始结束时间方便之后插入新时间事直接插入对应组而不影响其他组
+ *
+ * @export
+ * @interface EventGroup
+ */
 export interface EventGroup {
   id: number;
   events: Event[];
@@ -11,6 +30,13 @@ export interface EventGroup {
   end: number;
 }
 
+/**
+ * 可渲染节点
+ * 节点信息加上节点组中的兄弟数量信息就可以直接渲染出一个事件的位置
+ *
+ * @export
+ * @interface Node
+ */
 export interface Node {
   id: number;
   start: number;
@@ -18,6 +44,14 @@ export interface Node {
   duration: number;
 }
 
+/**
+ * 节点组
+ * 由事件组进过计算而来
+ * 包含渲染所需要的兄弟数量(列数)信息
+ *
+ * @export
+ * @interface NodeGroup
+ */
 export interface NodeGroup {
   id: number;
   nodes: Node[];
@@ -30,11 +64,18 @@ export const isValidEvent = (event: Event) => {
   return true;
 };
 
-export const merge = (events: Event[]) => {
+export /**
+ * 合并相互存在的交集的事件为一个事件组
+ *
+ * @param {Event[]} events
+ * @returns {EventGroup[]}
+ */
+const merge = (events: Event[]) => {
   if (events.length === 0) return [];
   if (!events.every(isValidEvent)) {
     throw new Error("invalid events");
   }
+  // 先按开始事件进行排序
   events.sort((a, b) => {
     if (a.start !== b.start) {
       return a.start - b.start;
@@ -42,6 +83,7 @@ export const merge = (events: Event[]) => {
     return a.end - b.end;
   });
   const result: EventGroup[] = [];
+  // 用前后两个滑动指针来统计该组范围
   let startPointer = events[0].start;
   let endPointer = events[0].end;
   let currentEventGroup: EventGroup = {
@@ -75,8 +117,15 @@ export const merge = (events: Event[]) => {
   return result;
 };
 
-// 将EventGroup转化成可以直接渲染的节点Node形式
-export const generateNodeGroup = (eventGroup: EventGroup) => {
+//
+export /**
+ *
+ * 将EventGroup转化成可以直接渲染的节点组NodeGroup形式
+ *
+ * @param {EventGroup} eventGroup
+ * @returns {NodeGroup}
+ */
+const generateNodeGroup = (eventGroup: EventGroup) => {
   // 如果该组只有一个事件 则为独占模式
   if (eventGroup.events.length === 1) {
     const currentEvent = eventGroup.events[0];
@@ -100,6 +149,7 @@ export const generateNodeGroup = (eventGroup: EventGroup) => {
     siblings: 0,
   };
 
+  // 以时间点为key来记录每个时间点上的事件
   const eventStack: { [key: number]: Event[] } = {};
 
   eventGroup.events.forEach((event) => {
@@ -118,6 +168,7 @@ export const generateNodeGroup = (eventGroup: EventGroup) => {
     }
   });
 
+  // 按事件排序 然后进行遍历
   const sortedKeys = Object.keys(eventStack)
     .map((key) => parseInt(key, 10))
     .sort((a, b) => a - b);

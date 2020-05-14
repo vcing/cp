@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Calendar from "./components/Calendar";
 import Test from "./components/Test";
-import { merge, generateNodeGroup, NodeGroup } from "./lib/index";
+import { merge, generateNodeGroup, NodeGroup, Event } from "./lib/index";
 import "./App.css";
 
 const defaultData = [
@@ -29,9 +29,16 @@ const defaultData = [
 
 function App() {
   const [data, setData] = useState(defaultData);
-  // const data = defaultData;
   const eventGroups = merge(data);
   const nodeGroups: NodeGroup[] = eventGroups.map(generateNodeGroup);
+
+  (window as any).layOutDay = (events: { start: number; end: number }[]) => {
+    const dataWithId: Event[] = [];
+    for (let i = 0; i < events.length; i += 1) {
+      dataWithId.push({ id: i, ...events[i] });
+    }
+    setData(dataWithId);
+  };
 
   return (
     <div className="App">
