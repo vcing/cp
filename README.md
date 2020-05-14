@@ -19,8 +19,9 @@
 
 但是由于分组后所产生的新数据结构和流程，所以在工程层面上还是增加了一些算法的负责度，降低了可读性。
 
-源码暂时托管在github上，地址: https://github.com/vcing/cp  
-  
+源码暂时托管在github上，地址: [https://github.com/vcing/cp](https://github.com/vcing/cp)  
+
+
 [在线预览地址](https://vcing.github.io/cp) 
 
 源码部署启动流程可以参考create-react-app的文档[README-cra.md](REACTME-cra.md)
