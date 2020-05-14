@@ -4,7 +4,6 @@ import styles from "./index.module.css";
 
 const Calendar = (props: { nodeGroups: NodeGroup[] }) => {
   const { nodeGroups } = props;
-  console.log(nodeGroups);
   const times = [9, 10, 11, 12, 1, 2, 3, 4, 5, 6, 7, 8];
   const elements: React.ReactElement[] = [];
   nodeGroups.forEach((nodeGroup) => {

@@ -31,6 +31,9 @@ export const isValidEvent = (event: Event) => {
 };
 
 export const merge = (events: Event[]) => {
+  if (!events.every(isValidEvent)) {
+    throw new Error("invalid events");
+  }
   events.sort((a, b) => {
     if (a.start !== b.start) {
       return a.start - b.start;

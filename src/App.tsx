@@ -1,62 +1,31 @@
-import React from "react";
+import React, { useState } from "react";
 import Calendar from "./components/Calendar";
+import Test from "./components/Test";
 import { merge, generateNodeGroup, NodeGroup } from "./lib/index";
 import "./App.css";
 
-// const defaultData = [
-//   {
-//     start: 30,
-//     end: 150,
-//   },
-//   {
-//     start: 540,
-//     end: 600,
-//   },
-//   {
-//     start: 560,
-//     end: 620,
-//   },
-//   {
-//     start: 610,
-//     end: 670,
-//   },
-// ];
-
 const defaultData = [
   {
-    start: 0,
-    end: 30,
-    id: 0,
-  },
-  {
     start: 30,
-    end: 60,
-    id: 1,
+    end: 150,
   },
   {
-    start: 0,
-    end: 60,
-    id: 3,
+    start: 540,
+    end: 600,
   },
   {
-    start: 30,
-    end: 90,
-    id: 4,
+    start: 560,
+    end: 620,
   },
   {
-    start: 60,
-    end: 120,
-    id: 5,
-  },
-  {
-    start: 50,
-    end: 180,
-    id: 6,
+    start: 610,
+    end: 670,
   },
 ];
 
 function App() {
-  const data = defaultData;
+  const [data, setData] = useState(defaultData);
+  // const data = defaultData;
   const dataWithId = data.map((event, index) => ({ id: index, ...event }));
   const eventGroups = merge(dataWithId);
   const nodeGroups: NodeGroup[] = eventGroups.map(generateNodeGroup);
@@ -64,6 +33,7 @@ function App() {
   return (
     <div className="App">
       <Calendar nodeGroups={nodeGroups} />
+      <Test setData={setData} />
     </div>
   );
 }
