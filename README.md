@@ -22,6 +22,6 @@
 源码暂时托管在github上，地址: [https://github.com/vcing/cp](https://github.com/vcing/cp)  
 
 
-[在线预览地址](https://vcing.github.io/cp) 
+[在线预览地址1](https://vcing.github.io/cp) [在线预览地址2](http://vcing.net)
 
 源码部署启动流程可以参考create-react-app的文档[README-cra.md](README-cra.md)
