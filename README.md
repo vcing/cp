@@ -1,44 +1,26 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+基于 create-react-app 开发完成的该题目。
+主要算法在 src/lib/index.ts 中
 
-## Available Scripts
 
-In the project directory, you can run:
+## 算法说明
+首先根据分治的思想将相互存在交集的事件合并到对应的事件组中。  
+然后每组事件新建一种Hash结构，以事件为key，值为该时间点上所发生的所有事件(开始/结束)。  
+用类似于栈的思路 进栈+1出栈-1 从而得出该组最大并行事件数，也就得到了该组事件渲染所需的宽度。  
+另外每个进栈的事件都需要分配位置进行渲染。  
+所以维护了一个occupied数组。索引代表第几列，值代表对应的事件ID。  
+入栈时按从左到右的顺序寻找空位，出栈时将自己所占的位置置为-1，让后来的事件可以占用。  
+遍历完后所有渲染所需的top left width height信息就已全部计算获得。  
 
-### `npm start`
+通过上诉算法完成后，发现其实不进行合并分组也可以正确的计算出布局位置信息。  
+但是基于以下几点还是保留了第一步的合并分组算法：  
+1. 合并分组算法可以在第一时间将独占(时间上不存在冲突的)事件筛选出去，从而减少第二步遍历的空间复杂度
+2. 如果基于实际应用场景，插入新事件也会是一个高频操作，分组后只用将新建的事件插入对应组然后单独重新计算该组。
+3. 在渲染层面上，由于不同组互相没有影响。基于react中key的原理，可以让更新操作避免重绘全部事件节点。
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+但是由于分组后所产生的新数据结构和流程，所以在工程层面上还是增加了一些算法的负责度，降低了可读性。
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+源码暂时托管在github上，地址: https://github.com/vcing/cp  
+  
+[在线预览地址](https://vcing.github.io/cp) 
 
-### `npm test`
-
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+源码部署启动流程可以参考create-react-app的文档[README-cra.md](REACTME-cra.md)
