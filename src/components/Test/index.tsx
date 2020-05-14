@@ -206,6 +206,7 @@ const Test = ({ setData, data }: propsType) => {
 
   const renderClick = () => {
     if (!isSettingValid()) return;
+    if (+times > 1) return;
     randomTest(
       addMessage,
       setData,
