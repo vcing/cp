@@ -1,10 +1,11 @@
 export interface Event {
+  id: number;
   start: number;
   end: number;
-  id: number;
 }
 
 export interface EventGroup {
+  id: number;
   events: Event[];
   start: number;
   end: number;
@@ -14,8 +15,13 @@ export interface Node {
   id: number;
   start: number;
   index: number;
-  siblings: number;
   duration: number;
+}
+
+export interface NodeGroup {
+  id: number;
+  nodes: Node[];
+  siblings: number;
 }
 
 export const isValidEvent = (event: Event) => {
@@ -35,6 +41,7 @@ export const merge = (events: Event[]) => {
   let startPointer = events[0].start;
   let endPointer = events[0].end;
   let currentEventGroup: EventGroup = {
+    id: result.length,
     events: [events[0]],
     start: startPointer,
     end: endPointer,
@@ -48,6 +55,7 @@ export const merge = (events: Event[]) => {
       startPointer = currentEvent.start;
       endPointer = currentEvent.end;
       currentEventGroup = {
+        id: result.length,
         events: [currentEvent],
         start: startPointer,
         end: endPointer,
@@ -64,21 +72,29 @@ export const merge = (events: Event[]) => {
 };
 
 // 将EventGroup转化成可以直接渲染的节点Node形式
-export const generateNodes = (eventGroup: EventGroup) => {
+export const generateNodeGroup = (eventGroup: EventGroup) => {
   // 如果该组只有一个事件 则为独占模式
   if (eventGroup.events.length === 1) {
     const currentEvent = eventGroup.events[0];
-    return [
-      {
-        top: currentEvent.start,
-        duration: currentEvent.end - currentEvent.start,
-        sibling: 1,
-        index: 1,
-      },
-    ];
+    return {
+      id: eventGroup.id,
+      nodes: [
+        {
+          id: currentEvent.id,
+          start: currentEvent.start,
+          duration: currentEvent.end - currentEvent.start,
+          index: 1,
+        },
+      ],
+      siblings: 1,
+    } as NodeGroup;
   }
 
-  const nodes: Node[] = [];
+  const nodeGroup: NodeGroup = {
+    id: eventGroup.id,
+    nodes: [],
+    siblings: 0,
+  };
 
   const eventStack: { [key: number]: Event[] } = {};
 
@@ -121,11 +137,10 @@ export const generateNodes = (eventGroup: EventGroup) => {
         // 如果查找不到空位，则往后追加
         index = index === -1 ? occupied.length : index;
         occupied[index] = event.id; // 占位
-        nodes.push({
+        nodeGroup.nodes.push({
           id: event.id,
           start: event.start,
           duration: event.end - event.start,
-          siblings: 0, // 暂时不知道，遍历完当前组后重新赋值
           index,
         });
       } else {
@@ -137,9 +152,8 @@ export const generateNodes = (eventGroup: EventGroup) => {
     });
     maxSiblings = Math.max(maxSiblings, currentSiblings);
   });
-  // 给当前组的所有节点附上正确的兄弟数量
-  for (let i = 0; i < nodes.length; i += 1) {
-    nodes[i].siblings = maxSiblings;
-  }
-  return nodes;
+
+  nodeGroup.siblings = maxSiblings;
+
+  return nodeGroup;
 };

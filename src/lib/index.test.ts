@@ -1,4 +1,4 @@
-import { Event, merge, generateNodes } from "./index";
+import { Event, merge, generateNodeGroup } from "./index";
 
 test("generate nodes for 3 events", () => {
   const data: Event[] = [
@@ -22,37 +22,24 @@ test("generate nodes for 3 events", () => {
   const eventGroups = merge(data);
   expect(eventGroups).toStrictEqual([
     {
+      id: 0,
       events: data,
       start: 1,
       end: 3,
     },
   ]);
 
-  const nodes = eventGroups.map(generateNodes);
-  expect(nodes).toStrictEqual([
-    [
-      {
-        id: 0,
-        start: 1,
-        duration: 1,
-        siblings: 2,
-        index: 0,
-      },
-      {
-        id: 3,
-        start: 1,
-        duration: 2,
-        siblings: 2,
-        index: 1,
-      },
-      {
-        id: 1,
-        start: 2,
-        duration: 1,
-        siblings: 2,
-        index: 0,
-      },
-    ],
+  const nodeGroups = eventGroups.map(generateNodeGroup);
+  expect(nodeGroups).toStrictEqual([
+    {
+      id: 0,
+      nodes: [
+        { id: 0, start: 1, duration: 1, index: 0 },
+        { id: 3, start: 1, duration: 2, index: 1 },
+        { id: 1, start: 2, duration: 1, index: 0 },
+      ],
+      siblings: 2,
+    },
   ]);
 });
 
@@ -78,13 +65,21 @@ test("generate node for calendar puzzle", () => {
 
   const dataWithId = data.map((event, index) => ({ id: index, ...event }));
   const eventGroups = merge(dataWithId);
-  const result = eventGroups.map(generateNodes);
+  const result = eventGroups.map(generateNodeGroup);
   expect(result).toStrictEqual([
-    [{ top: 30, duration: 120, sibling: 1, index: 1 }],
-    [
-      { id: 1, start: 540, duration: 60, siblings: 2, index: 0 },
-      { id: 2, start: 560, duration: 60, siblings: 2, index: 1 },
-      { id: 3, start: 610, duration: 60, siblings: 2, index: 0 },
-    ],
+    {
+      id: 0,
+      nodes: [{ id: 0, start: 30, duration: 120, index: 1 }],
+      siblings: 1,
+    },
+    {
+      id: 1,
+      nodes: [
+        { id: 1, start: 540, duration: 60, index: 0 },
+        { id: 2, start: 560, duration: 60, index: 1 },
+        { id: 3, start: 610, duration: 60, index: 0 },
+      ],
+      siblings: 2,
+    },
   ]);
 });
