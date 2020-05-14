@@ -24,4 +24,4 @@
 
 [在线预览地址](https://vcing.github.io/cp) 
 
-源码部署启动流程可以参考create-react-app的文档[README-cra.md](REACTME-cra.md)
+源码部署启动流程可以参考create-react-app的文档[README-cra.md](README-cra.md)
