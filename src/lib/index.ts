@@ -31,6 +31,7 @@ export const isValidEvent = (event: Event) => {
 };
 
 export const merge = (events: Event[]) => {
+  if (events.length === 0) return [];
   if (!events.every(isValidEvent)) {
     throw new Error("invalid events");
   }
